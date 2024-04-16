@@ -9,7 +9,7 @@ const {
   deleteJob,
   getJob,
   jobStats,
-} = require("../controllers/jobs");
+} = require("../controllers/jobsController");
 
 router.route("/jobs").get(getJobs);
 router.route("/job/:id/:slug").get(getJob);

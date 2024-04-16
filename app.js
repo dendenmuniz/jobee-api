@@ -6,8 +6,6 @@ const connectDatabase = require("./config/database");
 
 dotenv.config({ path: "./config/config.env" });
 
-const jobs = require("./routes/jobs");
-
 // Handling uncaught exception
 process.on("uncaughtException", (err) => {
   console.log(`Error: ${err.message}`);
@@ -27,7 +25,12 @@ const errorMiddleware = require("./middlewares/errors");
 //Error Handling
 const ErrorHandler = require("./utils/errorHandler");
 
+const jobs = require("./routes/jobs");
+const auth = require("./routes/auth");
+
 app.use("/api/v1", jobs);
+app.use("/api/v1", auth);
+
 app.all("*", (req, res, next) => {
   next(new ErrorHandler(`${req.originalUrl} route not found`, 404));
 });
