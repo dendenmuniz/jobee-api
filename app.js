@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 const dotenv = require("dotenv");
+const cookieParser = require("cookie-parser");
 
 const connectDatabase = require("./config/database");
 
@@ -18,6 +19,9 @@ connectDatabase();
 
 //setup body parser
 app.use(express.json());
+
+//set cookie parses
+app.use(cookieParser());
 
 // //Middleware
 const errorMiddleware = require("./middlewares/errors");
