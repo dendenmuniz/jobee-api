@@ -33,12 +33,16 @@ const userSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
-  resetPassrowdToken: String,
+  resetPasswordToken: String,
   resetPasswordExpire: Date,
 });
 
 //Encrypting password
 userSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) {
+    next();
+  }
+
   this.password = await bcrypt.hash(this.password, 10);
   next();
 });
@@ -61,7 +65,7 @@ userSchema.methods.getResetPasswordToken = function () {
   const resetToken = crypto.randomBytes(20).toString("hex");
 
   //Hash and set to resetPasswordToken
-  this.resetPassrwordToken = crypto
+  this.resetPasswordToken = crypto
     .createHash("sha256")
     .update(resetToken)
     .digest("hex");
