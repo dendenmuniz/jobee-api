@@ -9,6 +9,7 @@ const {
   deleteJob,
   getJob,
   jobStats,
+  applyForAJob,
 } = require("../controllers/jobsController");
 
 const { isAuthenticadedUser, authorizedRoles } = require("../middlewares/auth");
@@ -24,5 +25,9 @@ router
   .put(isAuthenticadedUser, authorizedRoles("employer", "admin"), updateJob)
   .delete(isAuthenticadedUser, authorizedRoles("employer", "admin"), deleteJob);
 router.route("/stats/:topic").get(jobStats);
+
+router
+  .route("/job/:id/apply")
+  .put(isAuthenticadedUser, authorizedRoles("user"), applyForAJob);
 
 module.exports = router;
