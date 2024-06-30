@@ -8,6 +8,7 @@ const rateLimit = require("express-rate-limit");
 const helmet = require("helmet");
 const xssClean = require("xss-clean");
 const hpp = require("hpp");
+const cors = require("cors");
 
 const errorMiddleware = require("./middlewares/errors");
 const ErrorHandler = require("./utils/errorHandler");
@@ -56,6 +57,9 @@ const limiter = rateLimit({
   windownsMs: 10 * 60 * 1000, //10 mins
   max: 100,
 });
+
+//Setup CORS - Accessible by other domains
+app.use(cors());
 
 app.use(limiter);
 
