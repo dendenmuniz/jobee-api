@@ -1,10 +1,14 @@
 const express = require("express");
 const app = express();
+
 const dotenv = require("dotenv");
 const cookieParser = require("cookie-parser");
 const fileUpload = require("express-fileupload");
 const rateLimit = require("express-rate-limit");
+const helmet = require("helmet");
 
+const errorMiddleware = require("./middlewares/errors");
+const ErrorHandler = require("./utils/errorHandler");
 const connectDatabase = require("./config/database");
 
 dotenv.config({ path: "./config/config.env" });
@@ -28,6 +32,9 @@ app.use(cookieParser());
 //handle file upload
 app.use(fileUpload());
 
+//Setup security hearders
+app.use(helmet());
+
 //Rate limiting
 const limiter = rateLimit({
   windownsMs: 10 * 60 * 1000, //10 mins
@@ -35,12 +42,6 @@ const limiter = rateLimit({
 });
 
 app.use(limiter);
-
-// //Middleware
-const errorMiddleware = require("./middlewares/errors");
-
-//Error Handling
-const ErrorHandler = require("./utils/errorHandler");
 
 const jobs = require("./routes/jobs");
 const auth = require("./routes/auth");
