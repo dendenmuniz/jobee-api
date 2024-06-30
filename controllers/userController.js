@@ -75,6 +75,21 @@ exports.getPublishedJobs = catchAsyncErrors(async (req, res, next) => {
   });
 });
 
+// Show jobs with applicants published by employer -> /api/v1/jobs/with-applicants
+exports.getPublishedJobsWithApplicants = catchAsyncErrors(
+  async (req, res, next) => {
+    const jobs = await Job.find({ user: req.user.id }).select(
+      "+applicantsApplied"
+    );
+
+    res.status(200).json({
+      success: true,
+      results: jobs.length,
+      data: jobs,
+    });
+  }
+);
+
 //Delete current user -> /api/v1/me/delete
 exports.deleteUser = catchAsyncErrors(async (req, res, next) => {
   deleteUserData(req.user.id, req.user.role);
@@ -107,12 +122,10 @@ async function deleteUserData(user, role) {
         "\\controllers",
         ""
       );
-      console.log(filepath);
 
       fs.unlink(filepath, (err) => {
         if (err) return console.log(err);
       });
-      console.log(obj);
 
       appliedJobs[i].applicantsApplied.splice(
         appliedJobs[i].applicantsApplied.indexOf(obj.id)

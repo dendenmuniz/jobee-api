@@ -10,6 +10,7 @@ const {
   getPublishedJobs,
   getUsers,
   deletUserAdmin,
+  getPublishedJobsWithApplicants,
 } = require("../controllers/userController");
 const { isAuthenticadedUser, authorizedRoles } = require("../middlewares/auth");
 
@@ -18,9 +19,9 @@ router.use(isAuthenticadedUser);
 router.route("/me").get(getUserProfile);
 router.route("/jobs/applied").get(authorizedRoles("user"), getAppliedJobs);
 
-router
-  .route("/jobs/published")
-  .get(authorizedRoles("employer", "admin"), getPublishedJobs);
+router.route("/jobs/published").get(getPublishedJobs);
+
+router.route("/jobs/with-applicants").get(getPublishedJobsWithApplicants);
 
 router.route("/password/update").put(updatePassword);
 router.route("/me/update").put(updateUser);
