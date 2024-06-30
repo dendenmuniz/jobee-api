@@ -6,10 +6,13 @@ const cookieParser = require("cookie-parser");
 const fileUpload = require("express-fileupload");
 const rateLimit = require("express-rate-limit");
 const helmet = require("helmet");
+const xssClean = require("xss-clean");
+const hpp = require("hpp");
 
 const errorMiddleware = require("./middlewares/errors");
 const ErrorHandler = require("./utils/errorHandler");
 const connectDatabase = require("./config/database");
+const mongoSanitize = require("express-mongo-sanitize");
 
 dotenv.config({ path: "./config/config.env" });
 
@@ -23,6 +26,9 @@ process.on("uncaughtException", (err) => {
 // Connecting to database
 connectDatabase();
 
+//Setup security hearders
+app.use(helmet());
+
 //setup body parser
 app.use(express.json());
 
@@ -32,8 +38,18 @@ app.use(cookieParser());
 //handle file upload
 app.use(fileUpload());
 
-//Setup security hearders
-app.use(helmet());
+//Sanitize data
+app.use(mongoSanitize());
+
+//Prevent XSS attacks
+app.use(xssClean());
+
+//Prevent parameter pollution
+app.use(
+  hpp({
+    whitelist: ["positions"],
+  })
+);
 
 //Rate limiting
 const limiter = rateLimit({
