@@ -17,9 +17,11 @@ const { isAuthenticadedUser, authorizedRoles } = require("../middlewares/auth");
 router.route("/jobs").get(getJobs);
 router.route("/job/:id/:slug").get(getJob);
 router.route("/jobs/:zipcode/:distance").get(getJobsInRadius);
+
 router
   .route("/job/new")
   .post(isAuthenticadedUser, authorizedRoles("employer", "admin"), newJob);
+
 router
   .route("/job/:id")
   .put(isAuthenticadedUser, authorizedRoles("employer", "admin"), updateJob)
