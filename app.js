@@ -2,7 +2,8 @@ const express = require("express");
 const app = express();
 const dotenv = require("dotenv");
 const cookieParser = require("cookie-parser");
-const fileUpload = require('express-fileupload')
+const fileUpload = require("express-fileupload");
+const rateLimit = require("express-rate-limit");
 
 const connectDatabase = require("./config/database");
 
@@ -26,6 +27,14 @@ app.use(cookieParser());
 
 //handle file upload
 app.use(fileUpload());
+
+//Rate limiting
+const limiter = rateLimit({
+  windownsMs: 10 * 60 * 1000, //10 mins
+  max: 100,
+});
+
+app.use(limiter);
 
 // //Middleware
 const errorMiddleware = require("./middlewares/errors");
