@@ -9,6 +9,7 @@ const helmet = require("helmet");
 const xssClean = require("xss-clean");
 const hpp = require("hpp");
 const cors = require("cors");
+const bodyParser = require("body-parser");
 
 const errorMiddleware = require("./middlewares/errors");
 const ErrorHandler = require("./utils/errorHandler");
@@ -26,6 +27,10 @@ process.on("uncaughtException", (err) => {
 
 // Connecting to database
 connectDatabase();
+
+//Set up body parser
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.static("public"));
 
 //Setup security hearders
 app.use(helmet());
