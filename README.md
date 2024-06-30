@@ -2,6 +2,8 @@
 
 Jobee API is a Backend RESTful API for job seeking and posting. It is built in Node.js using Express.js and MongoDB.
 
+Documentation can be checked at localhost.
+
 ## Table of Contents
 
 - [Features](#features)
